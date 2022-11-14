@@ -31,4 +31,8 @@ async function insertNewBook(book: Book): Promise<QueryResult> {
   );
 }
 
-export { listBooks, updateBook, getBookById, insertNewBook };
+async function removeBook(bookId: number): Promise<QueryResult> {
+  return await connection.query(`DELETE FROM books WHERE id = $1;`, [bookId]);
+}
+
+export { listBooks, updateBook, getBookById, insertNewBook, removeBook };

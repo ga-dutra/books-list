@@ -5,6 +5,7 @@ import {
   insertNewBook,
   listBooks,
   updateBook,
+  removeBook,
 } from "../repositories/books.repositories.js";
 
 async function getBooks(req: Request, res: Response) {
@@ -48,4 +49,14 @@ async function createBook(req: Request, res: Response) {
   }
 }
 
-export { getBooks, avaliateBook, createBook };
+async function deleteBook(req: Request, res: Response) {
+  const { id } = req.params;
+  try {
+    await removeBook(Number(id));
+    return res.status(200).send({ message: "book deleted" });
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+}
+
+export { getBooks, avaliateBook, createBook, deleteBook };
