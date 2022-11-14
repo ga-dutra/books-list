@@ -5,7 +5,7 @@ export const BookSchema = Joi.object({
   author: Joi.string().required(),
   read: Joi.boolean(),
   score: Joi.number(),
-  overview: Joi.string().required(),
+  overview: Joi.string(),
 });
 
 export const MovieSchema = Joi.object({

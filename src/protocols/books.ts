@@ -8,4 +8,10 @@ export type BookEntity = {
   overview: string | null;
 };
 
-export type Book = Omit<BookEntity, "id">;
+export type Book = Omit<BookEntity, "id" | "read" | "score" | "overview">;
+
+export type BookAvaliation = {
+  name?: string;
+  score: number;
+  overview: string;
+};

@@ -1,9 +1,34 @@
 import { QueryResult } from "pg";
-import { BookEntity } from "src/protocols/books.js";
+import { Book, BookAvaliation, BookEntity } from "../protocols/books.js";
 import connection from "../database/database.js";
 
 async function listBooks(): Promise<QueryResult<BookEntity>> {
   return await connection.query(`SELECT * FROM books`);
 }
 
-export { listBooks };
+async function updateBook(
+  bookId: number,
+  avaliation: BookAvaliation
+): Promise<QueryResult> {
+  return await connection.query(
+    `UPDATE books 
+     SET read = TRUE, 
+     score = &1, 
+     overview = $2 
+     WHERE id = &3;`,
+    [avaliation.score, avaliation.overview, bookId]
+  );
+}
+
+async function getBookById(bookId: number): Promise<QueryResult> {
+  return await connection.query(`SELECT * FROM books WHERE id = $1;`, [bookId]);
+}
+
+async function insertNewBook(book: Book): Promise<QueryResult> {
+  return await connection.query(
+    `INSERT INTO books (title, author) VALUES ($1, $2);`,
+    [book.title, book.author]
+  );
+}
+
+export { listBooks, updateBook, getBookById, insertNewBook };
