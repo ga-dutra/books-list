@@ -6,10 +6,22 @@ import {
   listBooks,
   updateBook,
   removeBook,
+  listBooksByGenre,
 } from "../repositories/books.repositories.js";
 
 async function getBooks(req: Request, res: Response) {
+  const { genre } = req.query;
   try {
+    if (genre) {
+      const books = (await listBooks(genre)).rows;
+      return res
+        .status(200)
+        .send(
+          books.length !== 0
+            ? books
+            : { message: `there are no books of the genre ${genre}` }
+        );
+    }
     const books = (await listBooks()).rows;
     return res.status(200).send(books);
   } catch (error) {
@@ -59,4 +71,13 @@ async function deleteBook(req: Request, res: Response) {
   }
 }
 
-export { getBooks, avaliateBook, createBook, deleteBook };
+async function filterByGenre(req: Request, res: Response) {
+  try {
+    const booksByGenre = (await listBooksByGenre()).rows;
+    return res.status(200).send(booksByGenre);
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+}
+
+export { getBooks, avaliateBook, createBook, deleteBook, filterByGenre };

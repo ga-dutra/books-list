@@ -3,6 +3,7 @@ export type BookEntity = {
   id: number;
   title: string;
   author: string;
+  genre: string;
   read: boolean;
   score: number | null;
   overview: string | null;

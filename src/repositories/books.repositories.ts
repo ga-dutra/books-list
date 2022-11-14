@@ -2,7 +2,13 @@ import { QueryResult } from "pg";
 import { Book, BookAvaliation, BookEntity } from "../protocols/books.js";
 import connection from "../database/database.js";
 
-async function listBooks(): Promise<QueryResult<BookEntity>> {
+async function listBooks(genre = null): Promise<QueryResult<BookEntity>> {
+  if (genre) {
+    return await connection.query(
+      `SELECT * FROM books WHERE LOWER("genre") = $1;`,
+      [genre.toLowerCase()]
+    );
+  }
   return await connection.query(`SELECT * FROM books`);
 }
 
@@ -26,8 +32,8 @@ async function getBookById(bookId: number): Promise<QueryResult> {
 
 async function insertNewBook(book: Book): Promise<QueryResult> {
   return await connection.query(
-    `INSERT INTO books (title, author) VALUES ($1, $2);`,
-    [book.title, book.author]
+    `INSERT INTO books (title, author, genre) VALUES ($1, $2, $3);`,
+    [book.title, book.author, book.genre]
   );
 }
 
@@ -35,4 +41,19 @@ async function removeBook(bookId: number): Promise<QueryResult> {
   return await connection.query(`DELETE FROM books WHERE id = $1;`, [bookId]);
 }
 
-export { listBooks, updateBook, getBookById, insertNewBook, removeBook };
+async function listBooksByGenre(): Promise<QueryResult<BookEntity>> {
+  return await connection.query(`SELECT LOWER(books.genre) 
+  AS genre, 
+  COUNT(*) AS "booksQuantity" 
+  FROM books 
+  GROUP BY LOWER(books.genre);`);
+}
+
+export {
+  listBooks,
+  updateBook,
+  getBookById,
+  insertNewBook,
+  removeBook,
+  listBooksByGenre,
+};
