@@ -2,8 +2,8 @@
   "compilerOptions": {
     "outDir": "dist",
     "esModuleInterop": true,
-    "module": "es6",
     "moduleResolution": "Node",
+    "module": "es6",
     "baseUrl": ".",
     "paths": {
       "joi": ["node_modules/joi/dist/joi-browser.min"]
