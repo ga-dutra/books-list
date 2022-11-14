@@ -8,12 +8,3 @@ export const BookSchema = Joi.object({
   score: Joi.number(),
   overview: Joi.string(),
 });
-
-export const MovieSchema = Joi.object({
-  title: Joi.string().required(),
-  platform: Joi.string().required(),
-  genre: Joi.string().required(),
-  watched: Joi.boolean(),
-  score: Joi.number(),
-  overview: Joi.string().required(),
-});
