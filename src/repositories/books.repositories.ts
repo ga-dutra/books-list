@@ -19,9 +19,9 @@ async function updateBook(
   return await connection.query(
     `UPDATE books 
      SET read = TRUE, 
-     score = &1, 
+     score = $1, 
      overview = $2 
-     WHERE id = &3;`,
+     WHERE id = $3;`,
     [avaliation.score, avaliation.overview, bookId]
   );
 }

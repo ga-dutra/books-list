@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Book, BookAvaliation, BookEntity } from "../protocols/books.js";
-import { BookSchema } from "../schemas/books.schemas.js";
+import { BookSchema, BookAvaliationSchema } from "../schemas/books.schemas.js";
 import {
   insertNewBook,
   listBooks,
@@ -32,6 +32,17 @@ async function getBooks(req: Request, res: Response) {
 async function avaliateBook(req: Request, res: Response) {
   const { id } = req.params;
   const avaliation = req.body as BookAvaliation;
+
+  const bookAvaliatonValidation = BookAvaliationSchema.validate(avaliation, {
+    abortEarly: false,
+  });
+
+  if (bookAvaliatonValidation.error) {
+    const errors = bookAvaliatonValidation.error.details.map(
+      (details) => details.message
+    );
+    return res.status(422).send(errors);
+  }
 
   try {
     await updateBook(Number(id), avaliation);
